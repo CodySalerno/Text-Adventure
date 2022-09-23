@@ -6,6 +6,7 @@ namespace Adventure
         static void Main()
         {
             Character[] Tutorial_Players = Encounters.Tutorial();
+            Character[] Cave_players = Encounters.Cave(Tutorial_Players);
         }
     }
     class Character {
@@ -46,11 +47,11 @@ namespace Adventure
         {
             this.Health = this.HealthMax;
         }
-        bool Attack(Character opponent)
+        bool Attack(Character opponent) //returns if opponent dies
         {
             Console.WriteLine(this.Name + " attacks " + opponent.Name + " dealing " + this.Strength + " damage.");
-            opponent.Health -= this.Strength;
-            if (opponent.Health <= 0)
+            opponent.Health -= this.Strength; //deals damage
+            if (opponent.Health <= 0) //checks if opponent dead
             {
                 opponent.Health = 0;
                 Console.WriteLine(opponent.Name + " has succumbed to its injuries.");
@@ -60,7 +61,7 @@ namespace Adventure
         }
         internal bool Fight(Character opponent)
         {
-            bool Self_First;
+            bool Self_First; //decides who should attack this or opponent
             if (this.Speed == opponent.Speed) //chooses random start
             {
                 Random random = new();
@@ -125,12 +126,10 @@ namespace Adventure
             {
                 return true;
             }
-            string display = "";
             foreach (KeyValuePair<string, int> item in this.Items)
             {
-                display += ("Item: " + item.Key + " Quantity: " + item.Value + "\n");
+                Console.WriteLine("Item: " + item.Key + " Quantity: " + item.Value);
             }
-            Console.WriteLine(display.TrimEnd('\n'));
             return false;
         }
     }
@@ -145,5 +144,12 @@ namespace Adventure
             Player.Level_Up(1,1,1);
             return new Character[] {Player, Spider};
         }
+        public static Character[] Cave(Character[] Inputs)
+        {
+            Character Player = Inputs[0];
+            Console.WriteLine("You enter a dark cave");
+            return new Character[] {Player};
+        }
+
     }
 }
