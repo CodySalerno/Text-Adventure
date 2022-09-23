@@ -1,10 +1,13 @@
-﻿namespace Adventure
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Adventure
 {
     class Program
     {
         static void Main()
         {
             Character[] Tutorial_Players = Encounters.Tutorial();
+            Tutorial_Players[0].Check_Inventory();
         }
     }
     class Character {
@@ -25,6 +28,13 @@
             this.Name = name;
             this.Inventory = inventory;
         }
+        internal void Check_Inventory()
+        {
+            bool emptyInv = this.Inventory.Check_Inventory();
+            if (!emptyInv) {
+                Console.WriteLine(this.Name + " has an empty inventory");
+            }
+        }
         internal void Level_Up(int health_gain, int strength_gain, int speed_gain)
         {
             this.HealthMax += health_gain;
@@ -36,6 +46,7 @@
         {
             this.Health = this.HealthMax;
         }
+        
         bool Attack(Character opponent)
         {
             Console.WriteLine(this.Name + " attacks " + opponent.Name + " dealing " + this.Strength + " damage.");
@@ -98,10 +109,10 @@
     class Inventory //keeps track of a Characters items.
     {
         //public static readonly Inventory emptyInv = new();
-        readonly Dictionary<string, int> Items;
+        Dictionary<string, int> Items;
         public Inventory() //constructor
         {
-            Items = new Dictionary<string, int>();
+            this.Items = new Dictionary<string, int>();
         }
         public Dictionary<string, int> Add(string name, int quantity)
         {
@@ -114,6 +125,20 @@
                 Items.Add(name, quantity);
             }
             return Items;
+        }
+        internal bool Check_Inventory()
+        {
+            if (this.Items.Count == 0)
+            {
+                return true;
+            }
+            string display = "";
+            foreach (KeyValuePair<string, int> item in this.Items)
+            {
+                display += ("Item: " + item.Key + " Quantity: " + item.Value + "\n");
+            }
+            Console.WriteLine(display);
+            return false;
         }
     }
     class Encounters 
