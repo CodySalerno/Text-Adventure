@@ -47,7 +47,6 @@ namespace Adventure
         {
             Console.WriteLine(this.Name + " attacks " + opponent.Name + " dealing " + this.Strength + " damage.");
             opponent.Health -= this.Strength;
-
             if (opponent.Health <= 0)
             {
                 opponent.Health = 0;
@@ -64,7 +63,6 @@ namespace Adventure
                 Random random = new();
                 if (random.Next(0, 1) == 0)
                 {
-
                     Self_First = true;
                 }
                 else
@@ -94,7 +92,6 @@ namespace Adventure
                 }
                 if (this.Health == 0) return false;
                 else return true;
-                
             }
             return true; //shouldn't ever trigger but if it does means both people had 0 hp at the start of the fight
         }
