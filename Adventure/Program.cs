@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace Adventure
 {
     class Program
@@ -17,8 +16,6 @@ namespace Adventure
         int Speed;
         readonly string? Name;
         Inventory Inventory;
-
-
         public Character(int[] stats, string? name, Inventory inventory)
         {
             this.Health = stats[0];
@@ -46,7 +43,6 @@ namespace Adventure
         {
             this.Health = this.HealthMax;
         }
-        
         bool Attack(Character opponent)
         {
             Console.WriteLine(this.Name + " attacks " + opponent.Name + " dealing " + this.Strength + " damage.");
@@ -102,10 +98,7 @@ namespace Adventure
             }
             return true; //shouldn't ever trigger but if it does means both people had 0 hp at the start of the fight
         }
-
-
     }
-
     class Inventory //keeps track of a Characters items.
     {
         //public static readonly Inventory emptyInv = new();
