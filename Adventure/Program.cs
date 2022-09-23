@@ -4,8 +4,7 @@
     {
         static void Main()
         {
-            Encounters.Tutorial();
-
+            Character[] Tutorial_Players = Encounters.Tutorial();
         }
     }
     class Character {
@@ -13,11 +12,11 @@
         int HealthMax;
         int Strength;
         int Speed;
-        readonly string Name;
+        readonly string? Name;
         Inventory Inventory;
 
 
-        public Character(int[] stats, string name, Inventory inventory)
+        public Character(int[] stats, string? name, Inventory inventory)
         {
             this.Health = stats[0];
             this.HealthMax = this.Health;
@@ -26,23 +25,26 @@
             this.Name = name;
             this.Inventory = inventory;
         }
-        void Level_Up(int health_gain, int strength_gain, int speed_gain)
+        internal void Level_Up(int health_gain, int strength_gain, int speed_gain)
         {
             this.HealthMax += health_gain;
             this.Strength += strength_gain;
             this.Speed += speed_gain;
+            this.HealMax();
         }
-        void HealMax()
+        internal void HealMax()
         {
             this.Health = this.HealthMax;
         }
         bool Attack(Character opponent)
         {
+            Console.WriteLine(this.Name + " attacks " + opponent.Name + " dealing " + this.Strength + " damage.");
             opponent.Health -= this.Strength;
 
             if (opponent.Health <= 0)
             {
                 opponent.Health = 0;
+                Console.WriteLine(opponent.Name + " has succumbed to its injuries.");
                 return true;
             }
             return false;
@@ -87,6 +89,7 @@
                 else return true;
                 
             }
+            return true; //shouldn't ever trigger but if it does means both people had 0 hp at the start of the fight
         }
 
 
@@ -94,7 +97,7 @@
 
     class Inventory //keeps track of a Characters items.
     {
-        public static readonly Inventory emptyInv = new();
+        //public static readonly Inventory emptyInv = new();
         readonly Dictionary<string, int> Items;
         public Inventory() //constructor
         {
@@ -115,20 +118,14 @@
     }
     class Encounters 
     {
-        public static void Tutorial()
+        public static Character[] Tutorial()
         {
             Console.WriteLine("What is your name");
-            string player_name = Console.ReadLine();
-            int[] player_stats = {5, 5, 5};
-            Inventory player_inventory = new();
-            Character Player = new(player_stats, player_name, player_inventory);
-            string spider_name = "Spider";
-            int[] spider_stats = {3,3,3};
-            Inventory spider_inv = Inventory.emptyInv;
-            Character Spider = new(spider_stats, spider_name, spider_inv);
+            Character Player = new(new int[] {5,5,5}, Console.ReadLine(), new Inventory());
+            Character Spider = new(new int[] {3,3,3}, "Spider", new Inventory());
             Player.Fight(Spider);
-
-
+            Player.Level_Up(1,1,1);
+            return new Character[] {Player, Spider};
         }
     }
 }
