@@ -6,7 +6,6 @@ namespace Adventure
         static void Main()
         {
             Character[] Tutorial_Players = Encounters.Tutorial();
-            Tutorial_Players[0].Check_Inventory();
         }
     }
     class Character {
@@ -15,7 +14,7 @@ namespace Adventure
         int Strength;
         int Speed;
         readonly string? Name;
-        Inventory Inventory;
+        readonly Inventory Inventory;
         public Character(int[] stats, string? name, Inventory inventory)
         {
             this.Health = stats[0];
@@ -25,10 +24,14 @@ namespace Adventure
             this.Name = name;
             this.Inventory = inventory;
         }
+        internal void Add_Inventory(string item, int value)
+        {
+            this.Inventory.AddToInv(item, value);
+        }
         internal void Check_Inventory()
         {
             bool emptyInv = this.Inventory.Check_Inventory();
-            if (!emptyInv) {
+            if (emptyInv) {
                 Console.WriteLine(this.Name + " has an empty inventory");
             }
         }
@@ -99,12 +102,12 @@ namespace Adventure
     class Inventory //keeps track of a Characters items.
     {
         //public static readonly Inventory emptyInv = new();
-        Dictionary<string, int> Items;
+        readonly Dictionary<string, int> Items;
         public Inventory() //constructor
         {
             this.Items = new Dictionary<string, int>();
         }
-        public Dictionary<string, int> Add(string name, int quantity)
+        internal Dictionary<string, int> AddToInv(string name, int quantity)
         {
             if (Items.ContainsKey(name)) //if item already in inventory, increase supply
             {
@@ -127,7 +130,7 @@ namespace Adventure
             {
                 display += ("Item: " + item.Key + " Quantity: " + item.Value + "\n");
             }
-            Console.WriteLine(display);
+            Console.WriteLine(display.TrimEnd('\n'));
             return false;
         }
     }
