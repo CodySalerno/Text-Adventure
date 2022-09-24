@@ -30,7 +30,7 @@
         int Strength;
         int Speed;
         readonly string? Name;
-        Inventory Inventory;
+        readonly Inventory Inventory;
         public Character(int[] stats, string? name, Inventory inventory)
         {
             this.Health = stats[0];
@@ -152,6 +152,19 @@
             }
             return false;
         }
+        internal bool Use_Item(string Item)
+        {
+            if (!this.ContainsKey(Item))
+            {
+                return false;
+            }
+            this[Item] -= 1;
+            if (this[Item] == 0)
+            {
+                this.Remove(Item);
+            }
+            return true;
+        }
     }
     class Encounters
     {
@@ -170,13 +183,15 @@
         {
             Character Player = input; //Player character
             Console.WriteLine("You enter a dark cave");
+            Player.Add_Inventory("Torch", 1);
+            Player.Check_Inventory();
             Console.WriteLine("There's a sleeping dragon to your right, and a door to your left which would you like to approach?");
             string response = Console.ReadLine().ToLower();
-            if (response.Contains("dragon"))
+            if (response.Contains("dragon") || response.Contains("right"))
             {
                 Encounters.Dragon(Player);
             }
-            else if (response.Contains("door"))
+            else if (response.Contains("door") || response.Contains("left"))
             {
                 Encounters.Door(Player);
             }
