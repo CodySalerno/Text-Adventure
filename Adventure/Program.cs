@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Cryptography.X509Certificates;
-
-namespace Adventure
+﻿namespace Adventure
 {
     class Program
     {
@@ -33,7 +30,7 @@ namespace Adventure
         int Strength;
         int Speed;
         readonly string? Name;
-        readonly Inventory Inventory;
+        Inventory Inventory;
         public Character(int[] stats, string? name, Inventory inventory)
         {
             this.Health = stats[0];
@@ -118,40 +115,39 @@ namespace Adventure
                     both_alive = opponent.Attack(this);
                     Self_First = true;
                 }
-                
+
             }
-            if (this.Health == 0) return false;
-            else return true;
-            return true; //shouldn't ever trigger but if it does means both people had 0 hp at the start of the fight
-        }
-    }
-    class Inventory //keeps track of a Characters items.
-    {
-        //public static readonly Inventory emptyInv = new();
-        readonly Dictionary<string, int> Items;
-        public Inventory() //constructor
-        {
-            this.Items = new Dictionary<string, int>();
-        }
-        internal Dictionary<string, int> AddToInv(string name, int quantity)
-        {
-            if (Items.ContainsKey(name)) //if item already in inventory, increase supply
+            if (this.Health == 0)
             {
-                Items[name] += quantity;
+                return false;
             }
             else
             {
-                Items.Add(name, quantity);
+                return true;
             }
-            return Items;
+        }
+    }
+    class Inventory : Dictionary<string, int>//keeps track of a Characters items.
+    {
+        internal Inventory AddToInv(string name, int quantity)
+        {
+            if (this.ContainsKey(name)) //if item already in inventory, increase supply
+            {
+                this[name] += quantity;
+            }
+            else
+            {
+                this.Add(name, quantity);
+            }
+            return this;
         }
         internal bool Check_Inventory()
         {
-            if (this.Items.Count == 0)
+            if (this.Count == 0)
             {
                 return true;
             }
-            foreach (KeyValuePair<string, int> item in this.Items)
+            foreach (KeyValuePair<string, int> item in this)
             {
                 Console.WriteLine("Item: " + item.Key + " Quantity: " + item.Value);
             }
