@@ -115,7 +115,6 @@
                     both_alive = opponent.Attack(this);
                     Self_First = true;
                 }
-
             }
             if (this.Health == 0)
             {
